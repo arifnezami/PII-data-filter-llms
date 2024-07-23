@@ -62,15 +62,18 @@ function updateOriginalInput(div, input) {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-    const inputs = document.querySelectorAll('input[type="text"], textarea');
-    inputs.forEach(input => {
+    const input = document.getElementById('prompt-textarea');
+    if (input) {
+        console.log("Extension loaded successfully on chatgpt.com");
         input.addEventListener('input', function() {
             let piiData = detectPII(this.value);
             if (piiData.length > 0) {
                 highlightPII(this, piiData);
             }
         });
-    });
+    } else {
+        console.error('Textarea with ID "prompt-textarea" not found.');
+    }
 });
 
 // Basic styles for highlights
@@ -87,18 +90,3 @@ style.textContent = `
     }
 `;
 document.head.appendChild(style);
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('DOM fully loaded and parsed');
-    const inputs = document.querySelectorAll('input[type="text"], textarea');
-    console.log('Inputs found:', inputs.length);
-    inputs.forEach(input => {
-        input.addEventListener('input', function() {
-            console.log('Input event triggered');
-            let piiData = detectPII(this.value);
-            console.log('PII Data detected:', piiData);
-            if (piiData.length > 0) {
-                highlightPII(this, piiData);
-            }
-        });
-    });
-});

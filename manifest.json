@@ -3,29 +3,19 @@
   "name": "PII Data Remover",
   "version": "1.0",
   "permissions": [
-    "activeTab",
-    "storage"
+      "storage",
+      "activeTab",
+      "background"
   ],
   "background": {
-    "service_worker": "background.js"
+      "service_worker": "background.js"
   },
-  "content_scripts": [
-    {
-      "matches": ["*://chatgpt.com/*"],
-      "js": ["content.js"]
-    }
-  ],
-  "action": {
-    "default_popup": "options.html",
-    "default_icon": {
-      "16": "icon.png",
-      "48": "icon.png",
-      "128": "icon.png"
-    }
-  },
-  "icons": {
-    "16": "icon.png",
-    "48": "icon.png",
-    "128": "icon.png"
+  "commands": {
+      "toggle-pii": {
+          "suggested_key": {
+              "default": "Ctrl+Shift+Y"
+          },
+          "description": "Toggle PII detection"
+      }
   }
 }
