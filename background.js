@@ -1,30 +1,25 @@
-chrome.runtime.onInstalled.addListener(function() {
-  console.log('Extension successfully installed!');
-  // Perform some actions on installation, e.g., setting default settings
-  chrome.storage.local.set({enabled: true}, function() {
-      console.log("Extension is enabled by default.");
+// This script runs in the background and can interact with different parts of the browser.
+
+try {
+  // Listening for the extension being installed
+  chrome.runtime.onInstalled.addListener(function() {
+    console.log("Extension installed successfully!");
+
+    // You can perform other background tasks here
+    // For example, setting up alarms, initializing storage, etc.
   });
-});
 
-// Listen to messages from content scripts
-chrome.runtime.onMessage.addListener(
-  function(request, sender, sendResponse) {
-      if (request.command == "logPII") {
-          console.log("PII detected: ", request.data);
-          sendResponse({result: "Data logged"});
+  // Listen for messages from content scripts or popup
+  chrome.runtime.onMessage.addListener(
+    function(request, sender, sendResponse) {
+      if (request.action === "checkInput") {
+        console.log("Checking input from content script...");
+        // Process the request or forward it, then send a response
+        sendResponse({result: "Processed"});
       }
-      return true;  // Indicate that you wish to send a response asynchronously (important if response will be delayed)
-  }
-);
+    }
+  );
+} catch (e) {
+  console.error("Error in background script:", e);
+}
 
-// Example to use a command or to trigger actions from the background
-chrome.commands.onCommand.addListener(function(command) {
-  if (command === "toggle-pii") {
-      chrome.storage.local.get('enabled', function(data) {
-          let currentState = data.enabled;
-          chrome.storage.local.set({enabled: !currentState}, function() {
-              console.log('Extension enabled state is now:', !currentState);
-          });
-      });
-  }
-});
